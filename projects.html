@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minimal Cyber Projects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(45deg, #1E1E2E, #12121A, #1E1E2E);
+      background-size: 400% 400%;
+      animation: gradientAnimation 20s ease infinite;
+      font-family: 'Inter', sans-serif;
+      color: #F1F1F1;
+      overflow: hidden;
+      position: relative;
+    }
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    #cyberCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      z-index: 10;
+      position: relative;
+      padding: 40px;
+      background: rgba(30, 30, 46, 0.85);
+      border-radius: 12px;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      animation: float 3s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+    .container:hover {
+      transform: scale(1.02);
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    h1 {
+      text-align: center;
+      font-size: 48px;
+      font-weight: 400;
+      margin-bottom: 30px;
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .project-card {
+      background: rgba(40, 40, 60, 0.8);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    .project-card h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .project-card p {
+      font-size: 16px;
+      opacity: 0.8;
+      margin-bottom: 15px;
+    }
+    .project-card a {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #FFF;
+      background: #00E5FF;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .project-card a:hover {
+      background: #00D1E0;
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="cyberCanvas"></canvas>
+  <div class="container">
+    <h1>Projects</h1>
+    <div class="projects-grid">
+      <div class="project-card">
+        <h2>MinTool</h2>
+        <p>A versatile multitool for webhooks </p>
+        <a href="https://github.com/AnonymousElixir/MinTool">View Project</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('cyberCanvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    let pile = new Array(width).fill(height);
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      pile = new Array(width).fill(height);
+    });
+    const mouse = { x: -1000, y: -1000 };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    class CyberFlake {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * -height;
+        this.radius = Math.random() * 3 + 2;
+        this.speedY = Math.random() * 1 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.vx = this.speedX;
+        this.vy = this.speedY;
+      }
+      update() {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          const force = (100 - dist) / 100;
+          const angle = Math.atan2(dy, dx);
+          this.vx += Math.cos(angle) * force * 0.05;
+          this.vy += Math.sin(angle) * force * 0.05;
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vx *= 0.99;
+        let ix = Math.floor(this.x);
+        if (ix < 0) ix = 0;
+        if (ix >= width) ix = width - 1;
+        if (this.y + this.radius >= pile[ix] - 2) {
+          const range = Math.floor(this.radius * 2);
+          for (let i = ix - range; i <= ix + range; i++) {
+            if (i >= 0 && i < width) {
+              pile[i] = Math.min(pile[i], this.y - this.radius);
+            }
+          }
+          this.reset();
+        }
+        if (this.y - this.radius > height) {
+          this.reset();
+        }
+      }
+      draw(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0,255,255,0.9)';
+        ctx.fill();
+      }
+    }
+    const cyberFlakes = [];
+    const maxFlakes = 150;
+    for (let i = 0; i < maxFlakes; i++) {
+      cyberFlakes.push(new CyberFlake());
+    }
+    function smoothPile() {
+      let smoothed = new Array(width);
+      for (let i = 0; i < width; i++) {
+        if (i === 0) {
+          smoothed[i] = (pile[i] + pile[i + 1]) / 2;
+        } else if (i === width - 1) {
+          smoothed[i] = (pile[i - 1] + pile[i]) / 2;
+        } else {
+          smoothed[i] = (pile[i - 1] + pile[i] + pile[i + 1]) / 3;
+        }
+      }
+      for (let i = 0; i < width; i++) {
+        pile[i] = pile[i] * 0.95 + smoothed[i] * 0.05;
+      }
+    }
+    function drawPile() {
+      ctx.fillStyle = 'rgba(0,255,255,0.2)';
+      ctx.beginPath();
+      ctx.moveTo(0, height);
+      for (let x = 0; x < width; x++) {
+        ctx.lineTo(x, pile[x]);
+      }
+      ctx.lineTo(width, height);
+      ctx.closePath();
+      ctx.fill();
+    }
+    function animateCyber() {
+      ctx.clearRect(0, 0, width, height);
+      smoothPile();
+      drawPile();
+      for (const flake of cyberFlakes) {
+        flake.update();
+        flake.draw(ctx);
+      }
+      requestAnimationFrame(animateCyber);
+    }
+    animateCyber();
+  </script>
+</body>
+</html>
