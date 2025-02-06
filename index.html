@@ -3,171 +3,224 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Minimal Cyber Suite</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Font for a futuristic look -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
-    rel="stylesheet"
-  />
+  <title>Minimal Cyber</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet" />
   <style>
-    /* Global Styles */
     body {
-      font-family: 'Orbitron', sans-serif;
-      transition: background 0.3s ease-in-out;
-      overflow-x: hidden;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(45deg, #1E1E2E, #12121A, #1E1E2E);
+      background-size: 400% 400%;
+      animation: gradientAnimation 20s ease infinite;
+      font-family: 'Inter', sans-serif;
+      color: #F1F1F1;
+      overflow: hidden;
+      position: relative;
     }
-    /* Glass effect card */
-    .glass {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-    /* Background container with animated hue */
-    #background {
-      position: fixed;
+    /* Canvas that will host our neon “cyberflake” effect */
+    #cyberCanvas {
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1;
-      background: radial-gradient(circle at center, rgba(0, 0, 50, 0.8), black);
-      animation: bgHue 20s infinite alternate;
+      z-index: 0;
+      pointer-events: none;
     }
-    @keyframes bgHue {
-      0% {
-        filter: hue-rotate(0deg);
-      }
-      100% {
-        filter: hue-rotate(360deg);
-      }
+    .container {
+      text-align: center;
+      background: rgba(30, 30, 46, 0.85);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 10;
+      animation: float 3s ease-in-out infinite;
+      transition: transform 0.3s ease;
     }
-    /* Particle styling and animation */
-    .particle {
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      background: cyan;
-      border-radius: 50%;
-      opacity: 0.8;
-      animation: float linear infinite;
+    .container:hover {
+      transform: scale(1.02);
     }
     @keyframes float {
-      0% {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      50% {
-        transform: translateY(-50px);
-        opacity: 0.5;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    h1 {
+      font-size: 48px;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 18px;
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+    .explore-button {
+      display: inline-block;
+      padding: 14px 28px;
+      font-size: 18px;
+      color: #FFF;
+      background: #00E5FF;
+      border: none;
+      border-radius: 30px;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .explore-button:hover {
+      background: #00D1E0;
+      transform: scale(1.08);
+      box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+    }
+    .attribution a {
+      color: #00E5FF;
+      text-decoration: none;
+    }
+    .attribution a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
-<body class="bg-black text-white dark:bg-white dark:text-black">
-  <!-- Animated Background & Particles -->
-  <div id="background"></div>
-
-  <!-- Navigation -->
-  <nav class="p-5 flex justify-between items-center glass m-4">
-    <h1 class="text-xl font-bold">Minimal Cyber</h1>
-    <div class="flex items-center space-x-4">
-      <a href="#tools" class="hover:text-cyan-400 transition">Tools</a>
-      <a href="#about" class="hover:text-cyan-400 transition">About</a>
-      <button
-        onclick="toggleTheme()"
-        class="px-4 py-2 bg-white text-black dark:bg-black dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition"
-      >
-        Toggle Theme
-      </button>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <header class="h-screen flex flex-col justify-center items-center text-center relative z-10 px-5">
-    <h2
-      class="text-6xl sm:text-8xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-600 text-transparent bg-clip-text drop-shadow-lg"
-    >
-      Minimal Cyber Suite
-    </h2>
-    <p class="mt-4 text-lg sm:text-2xl max-w-2xl opacity-80">
-      A collection of powerful, minimalistic tools for the digital age.
-    </p>
-    <a
-      href="#tools"
-      class="mt-6 px-6 py-3 bg-blue-500 rounded-lg text-white hover:bg-blue-600 transition shadow-lg"
-      >Explore Tools</a
-    >
-  </header>
-
-  <!-- Tools Section -->
-  <main id="tools" class="py-16 relative z-10">
-    <div class="max-w-7xl mx-auto px-4">
-      <h3 class="text-4xl font-bold text-center mb-12">Our Tools</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Tool Card 1 -->
-        <div class="glass p-6 rounded-xl text-center shadow-2xl transform hover:scale-105 transition">
-          <h4 class="text-2xl font-bold mb-3">MinTool</h4>
-          <p class="mb-4 opacity-80">
-            A multitool that harnesses webhooks and automation for maximum efficiency.
-          </p>
-          <button
-            class="mt-2 px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600 shadow-md transition"
-          >
-            Download
-          </button>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- About Section -->
-  <section id="about" class="py-16 bg-gray-900 dark:bg-gray-100 relative z-10">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <h3 class="text-4xl font-bold mb-6 text-white dark:text-black">
-        About Minimal Cyber
-      </h3>
-      <p class="text-lg opacity-80 text-gray-300 dark:text-gray-700">
-        Minimal Cyber Suite is built for professionals who demand minimalism and power. Our tools are lightweight, efficient, and designed to integrate seamlessly into your workflow—all with a sleek, futuristic aesthetic.
-      </p>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="py-8 text-center relative z-10">
-    <p class="opacity-70">&copy; 2025 Minimal Roblox. All rights reserved.</p>
-  </footer>
-
-  <!-- JavaScript for Theme Toggle and Particles -->
+<body>
+  <canvas id="cyberCanvas"></canvas>
+  <div class="container">
+    <h1>Minimal Cyber Suite</h1>
+    <p>Casual minimalism meets cyber dynamics.</p>
+    <a href="#" class="explore-button">Explore Tools</a>
+    <p class="attribution">A Site Made By <a href="https://discord.com/users/1235968089221365831" target="_blank">Cassidy Camp</a></p>
+  </div>
+  
   <script>
-    // Toggle dark/light theme by adding/removing the "dark" class on <html>
-    function toggleTheme() {
-      document.documentElement.classList.toggle('dark');
-    }
+    // Set up the canvas and resize handling
+    const canvas = document.getElementById('cyberCanvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    let pile = new Array(width).fill(height);
 
-    // Create animated particles in the background
-    function createParticles() {
-      const background = document.getElementById('background');
-      const particleCount = 80;
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        particle.style.top = `${Math.random() * 100}vh`;
-        particle.style.left = `${Math.random() * 100}vw`;
-        // Randomize duration between 3 and 7 seconds
-        particle.style.animationDuration = `${3 + Math.random() * 4}s`;
-        // Stagger animation start times for a more organic feel
-        particle.style.animationDelay = `${Math.random() * 5}s`;
-        background.appendChild(particle);
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      pile = new Array(width).fill(height);
+    });
+
+    // Track the mouse position for interactive effect
+    const mouse = { x: -1000, y: -1000 };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    // CyberFlake class creates a falling neon “flake”
+    class CyberFlake {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * -height;
+        this.radius = Math.random() * 3 + 2;
+        this.speedY = Math.random() * 1 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.vx = this.speedX;
+        this.vy = this.speedY;
+      }
+      update() {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          const force = (100 - dist) / 100;
+          const angle = Math.atan2(dy, dx);
+          this.vx += Math.cos(angle) * force * 0.05;
+          this.vy += Math.sin(angle) * force * 0.05;
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vx *= 0.99;
+        let ix = Math.floor(this.x);
+        if (ix < 0) ix = 0;
+        if (ix >= width) ix = width - 1;
+        if (this.y + this.radius >= pile[ix] - 2) {
+          const range = Math.floor(this.radius * 2);
+          for (let i = ix - range; i <= ix + range; i++) {
+            if (i >= 0 && i < width) {
+              pile[i] = Math.min(pile[i], this.y - this.radius);
+            }
+          }
+          this.reset();
+        }
+        if (this.y - this.radius > height) {
+          this.reset();
+        }
+      }
+      draw(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        // Neon cyan for a cyber-inspired look
+        ctx.fillStyle = 'rgba(0,255,255,0.9)';
+        ctx.fill();
       }
     }
-    createParticles();
+
+    // Create an array of cyber flakes
+    const cyberFlakes = [];
+    const maxFlakes = 200;
+    for (let i = 0; i < maxFlakes; i++) {
+      cyberFlakes.push(new CyberFlake());
+    }
+
+    // Smooth out the pile (accumulation effect)
+    function smoothPile() {
+      let smoothed = new Array(width);
+      for (let i = 0; i < width; i++) {
+        if (i === 0) {
+          smoothed[i] = (pile[i] + pile[i + 1]) / 2;
+        } else if (i === width - 1) {
+          smoothed[i] = (pile[i - 1] + pile[i]) / 2;
+        } else {
+          smoothed[i] = (pile[i - 1] + pile[i] + pile[i + 1]) / 3;
+        }
+      }
+      for (let i = 0; i < width; i++) {
+        pile[i] = pile[i] * 0.95 + smoothed[i] * 0.05;
+      }
+    }
+
+    // Draw the “pile” at the bottom with a subtle neon tint
+    function drawPile() {
+      ctx.fillStyle = 'rgba(0,255,255,0.2)';
+      ctx.beginPath();
+      ctx.moveTo(0, height);
+      for (let x = 0; x < width; x++) {
+        ctx.lineTo(x, pile[x]);
+      }
+      ctx.lineTo(width, height);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Main animation loop
+    function animateCyber() {
+      ctx.clearRect(0, 0, width, height);
+      smoothPile();
+      drawPile();
+      for (const flake of cyberFlakes) {
+        flake.update();
+        flake.draw(ctx);
+      } 
+      requestAnimationFrame(animateCyber);
+    }
+    
+    animateCyber();
   </script>
 </body>
 </html>
